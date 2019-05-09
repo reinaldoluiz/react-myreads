@@ -2,6 +2,8 @@ import React from 'react'
 import * as BooksAPI from './BooksAPI'
 import { Link } from 'react-router-dom'
 
+import Book from './Book'
+
 class BookList extends React.Component {
   
     state = {
@@ -9,19 +11,17 @@ class BookList extends React.Component {
       }
     
       componentWillMount() {
+        this.updateList();
+      }
+
+      updateList = () => {
         BooksAPI.getAll().then(result => this.setState({
           books: result
         }))
-      }
-    
-      updateBook(event, id) {
-        BooksAPI.update(id, event.target.value)
       }
     
       componentDidUpdate() {
-        BooksAPI.getAll().then(result => this.setState({
-          books: result
-        }))
+        this.updateList();
       }
     
    render(){
@@ -39,23 +39,9 @@ class BookList extends React.Component {
                 <ol className="books-grid">  
                   {this.state.books.map((book) =>
                      book.shelf === "currentlyReading" ?  <li>
-                     <div className="book">
-                     <div className="book-top">
-                         <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
-                         <div className="book-shelf-changer">
-                         <select onChange={(e) => {this.updateBook(e, book.id)}} defaultValue={book.shelf}> 
-                             <option value="move" disabled>Move to...</option>
-                             <option value="currentlyReading">Currently Reading</option>
-                             <option value="wantToRead">Want to Read</option>
-                             <option value="read">Read</option>
-                             <option value="none">None</option>
-         
-                         </select>
-                         </div>
-                     </div>
-                     <div className="book-title">{book.title}</div>
-                     <div className="book-authors">{book.author}</div>
-                     </div>
+                     <Book onChange={this.updateList} 
+                       data={book}
+                     />
                      </li> : ""
                   )}
                 </ol>
@@ -67,23 +53,9 @@ class BookList extends React.Component {
                 <ol className="books-grid">
                 {this.state.books.map((book) =>
                      book.shelf === "wantToRead" ?  <li>
-                     <div className="book">
-                     <div className="book-top">
-                         <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
-                         <div className="book-shelf-changer">
-                         <select onChange={(e) => {this.updateBook(e, book.id)}} defaultValue={book.shelf}> 
-                             <option value="move" disabled>Move to...</option>
-                             <option value="currentlyReading">Currently Reading</option>
-                             <option value="wantToRead">Want to Read</option>
-                             <option value="read">Read</option>
-                             <option value="none">None</option>
-         
-                         </select>
-                         </div>
-                     </div>
-                     <div className="book-title">{book.title}</div>
-                     <div className="book-authors">{book.author}</div>
-                     </div>
+                     <Book onChange={this.updateList} 
+                       data={book}
+                     />
                      </li> : ""
                   )}
                 </ol>
@@ -95,23 +67,9 @@ class BookList extends React.Component {
                 <ol className="books-grid">
                 {this.state.books.map((book) =>
                      book.shelf === "read" ?  <li>
-                     <div className="book">
-                     <div className="book-top">
-                         <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
-                         <div className="book-shelf-changer">
-                         <select onChange={(e) => {this.updateBook(e, book.id)}} defaultValue={book.shelf}> 
-                             <option value="move" disabled>Move to...</option>
-                             <option value="currentlyReading">Currently Reading</option>
-                             <option value="wantToRead">Want to Read</option>
-                             <option value="read">Read</option>
-                             <option value="none">None</option>
-         
-                         </select>
-                         </div>
-                     </div>
-                     <div className="book-title">{book.title}</div>
-                     <div className="book-authors">{book.author}</div>
-                     </div>
+                     <Book onChange={this.updateList} 
+                       data={book}
+                     />
                      </li> : ""
                   )}     
                 </ol>
